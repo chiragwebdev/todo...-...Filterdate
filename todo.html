@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="col-6 mx-auto pt-5">
+        <div class="input-group mb-3">
+            <input id="firstname" type="text" class="form-control" placeholder="firstname">
+            <input id="lastname" type="text" class="form-control" placeholder="lastname">
+            <button id="addlist" class="btn btn-primary" type="button" id="button-addon2">Add List</button>
+        </div>
+        <ul id="listgroup" class="list-group">
+        </ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
+    <script>
+        let addlist = document.getElementById('addlist');
+        let btntext = addlist.innerHTML;
+        let firstname = document.getElementById('firstname');
+        let lastname = document.getElementById('lastname');
+        let listgroup = document.getElementById('listgroup');
+        let userdataid = document.getElementById('userdataid');
+        let savebtn = document.getElementById('savebtn');
+        let arrayname = [];
+        let idnumber = null;
+        let getdata = localStorage.getItem('data')
+
+        if (getdata != null) {
+            arrayname = JSON.parse(getdata)
+            // console.log(JSON.parse(getdata))
+        }
+
+        addlist.addEventListener('click', function () {
+            if (firstname.value !== "") {
+                let firstn = firstname.value;
+                let lastn = lastname.value;
+                if (idnumber == null) {
+                    arrayname.push({ 'firstname': firstn, 'lastname': lastn })
+                } else {
+                    arrayname.splice(idnumber, 1, { 'firstname': firstn, 'lastname': lastn })
+                    document.getElementById('addlist').innerHTML = btntext;
+                    idnumber = null;
+                }
+                firstname.value = ""
+                lastname.value = ""
+                localdata(arrayname)
+            }
+        })
+
+        function localdata(arrayname) {
+            let jsondata = JSON.stringify(arrayname)
+            localStorage.setItem('data', jsondata)
+            showdata()
+        }
+
+        function showdata() {
+            let alldata = "";
+            arrayname.forEach((element, id) => {
+                alldata += `<li id="${id}" class="list-group-item d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <p class="me-3 mb-0">${id + 1}</p>
+                    <p class="mb-0 itemdata">${element.firstname} ${element.lastname}</p>
+                </div>
+                <div>
+                    <button onclick="edit(${id})" type="button" class="btn btn-warning me-4">Edit</button>
+                    <button onclick="remove(${id})" type="button" class="btn btn-danger">Remove</button>
+                </div>
+            </li>`
+                listgroup.innerHTML = alldata
+            });
+        }
+        showdata()
+
+        function edit(id) {
+            console.log(id)
+            document.getElementById('addlist').innerHTML = "Update"
+            let idnum = document.getElementById(id)
+            let itemdata = document.getElementsByClassName("itemdata")
+            console.log(arrayname[id].name)
+            firstname.value = arrayname[id].firstname
+            lastname.value = arrayname[id].lastname
+            idnumber = id
+        }
+
+        function remove(id) {
+            document.getElementById(id).remove()
+            arrayname.splice(id, 1)
+            localdata(arrayname)
+        }
+
+    </script>
+
+</body>
+
+</html>
