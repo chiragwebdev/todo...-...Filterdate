@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        #itemprint {
+            display: grid;
+            gap: 20px;
+            margin-top: 50px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+    </style>
+</head>
+
+<body class="bg-black text-white">
+
+    <div class="container">
+        <div class="py-5">
+            <div class="d-flex gap-5 filterbtn">
+            </div>
+            <section id="itemprint">
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <script>
+        const categorys = ['all', 'men', 'women', 'kids']
+        const item = [
+            {
+                id: "men",
+                itemname: "men 1",
+            },
+            {
+                id: "men",
+                itemname: "men 2",
+            },
+            {
+                id: "men",
+                itemname: "men 3",
+            },
+            {
+                id: "men",
+                itemname: "men 4",
+            },
+            {
+                id: "men",
+                itemname: "men 5",
+            },
+            {
+                id: "women",
+                itemname: "women 2",
+            },
+            {
+                id: "women",
+                itemname: "women 3",
+            },
+            {
+                id: "women",
+                itemname: "women 4",
+            },
+            {
+                id: "women",
+                itemname: "women 1",
+            },
+            {
+                id: "kids",
+                itemname: "kids 2",
+            },
+            {
+                id: "kids",
+                itemname: "kids 3",
+            },
+            {
+                id: "kids",
+                itemname: "kids 4",
+            },
+            {
+                id: "kids",
+                itemname: "kids 2",
+            },
+            {
+                id: "kids",
+                itemname: "kids 3",
+            },
+            {
+                id: "kids",
+                itemname: "kids 4",
+            },
+            {
+                id: "kids",
+                itemname: "kids 2",
+            },
+            {
+                id: "men",
+                itemname: "men 3",
+            },
+            {
+                id: "women",
+                itemname: "women 4",
+            },
+        ]
+
+
+        let filterbtn = document.querySelector('.filterbtn')
+        let itemfiltername = "all"
+
+        function categorysfn() {
+
+            for (let categoryname of categorys) {
+                let items = document.createElement('button')
+                items.innerHTML = categoryname
+                if (items.innerHTML === "all") {
+                    items.classList.add('btn', 'btn-primary')
+                } else items.classList.add('btn', 'btn-secondary')
+                items.setAttribute('data-itemname', categoryname)
+
+                filterbtn.appendChild(items)
+            }
+
+        }
+        categorysfn()
+
+        let btn = document.querySelectorAll('button')
+        
+        btn.forEach((btntag) => {
+            btntag.addEventListener('click', (e) => {
+                let attname = btntag.dataset.itemname
+                let btn2 = filterbtn.querySelector(".btn-primary")
+                btn2.classList.replace('btn-primary','btn-secondary' )
+                btntag.classList.replace('btn-secondary', 'btn-primary')
+                itemfiltername = attname
+                itemshow()
+            })
+        })
+
+        let itemprint = document.querySelector('#itemprint')
+        function itemshow() {
+            if (itemfiltername === "all") {
+                itemprint.innerHTML = ""
+                displaydata(item)
+            } else {
+                itemprint.innerHTML = ""
+                let filterdata = item.filter((item) => {
+                    return item.id === itemfiltername
+                })
+                displaydata(filterdata)
+            }
+        }
+        itemshow()
+
+        function displaydata(useritem) {
+            useritem.forEach((itemtype) => {
+                let div = document.createElement('div')
+                div.classList.add('card')
+                div.innerHTML = `<div class="card-body">${itemtype.itemname}</div>`
+                // div.setAttribute('data-itemname', categoryname)
+                itemprint.appendChild(div)
+            })
+        }
+
+
+    </script>
+</body>
+
+</html>
